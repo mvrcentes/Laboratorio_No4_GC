@@ -10,7 +10,7 @@
 
 
 
-int selectedPlanet = 2;
+int selectedPlanet = 3;
 
 Vertex vertexShader(const Vertex& vertex, const Uniforms& uniforms) {
     // Apply transformations to the input vertex using the matrices from the uniforms
@@ -159,4 +159,58 @@ if (selectedPlanet == 2) {
 
     return processedFragment;
 }
+
+if (selectedPlanet == 3) {
+    Color color;
+
+    // Define el color base para todo el planeta
+    glm::vec3 baseColor = glm::vec3(0.95f, 0.76f, 0.21f); // #F2C335
+
+    // Colores de las bacterias
+    glm::vec3 secondColor = glm::vec3(0.95f, 0.45f, 0.02f); // #F27405
+    glm::vec3 thirdColor = glm::vec3(0.85f, 0.24f, 0.02f); // #D93D04
+    glm::vec3 fourthColor = glm::vec3(0.55f, 0.01f, 0.01f); // #8C0303
+
+    glm::vec2 uv = glm::vec2(fragment.original.x, fragment.original.y);
+
+    FastNoiseLite noiseGenerator;
+    noiseGenerator.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
+
+    // Ajusta la escala del ruido para controlar la distribución de las bacterias
+    float noiseScale = 7.10f;
+    float noiseValue = noiseGenerator.GetNoise(uv.x * noiseScale, uv.y * noiseScale * noiseScale );
+
+    // Define un umbral para separar las áreas con bacterias y sin bacterias
+    float bacteriaThreshold = 0.3f;
+
+    if (noiseValue > bacteriaThreshold) {
+        // Asigna uno de los colores de las bacterias de manera aleatoria
+        glm::vec3 bacteriaColors[] = {baseColor, secondColor, thirdColor, fourthColor};
+        int colorIndex = int(noiseValue * 900.0f) % 4;
+        glm::vec3 tmpColor = bacteriaColors[colorIndex];
+
+        // Aplica el color uniforme a la intensidad del color de las bacterias
+        tmpColor *= baseColor;
+
+        color = Color(tmpColor.x, tmpColor.y, tmpColor.z);
+    } 
+    else {
+        // Asigna un color de fondo
+        // Asigna uno de los colores de las bacterias de manera aleatoria
+        glm::vec3 bacteriaColors[] = {baseColor, secondColor, thirdColor, fourthColor};
+        int colorIndex = int(noiseValue * 900.0f) % 4;
+        glm::vec3 tmpColor = bacteriaColors[colorIndex];
+
+        // Aplica el color uniforme a la intensidad del color de las bacterias
+        tmpColor *= baseColor;
+
+        color = Color(tmpColor.x, tmpColor.y, tmpColor.z);
+    }
+
+    Fragment processedFragment = fragment;
+    processedFragment.color = color * fragment.intensity;
+
+    return processedFragment;
+}
+
 }
