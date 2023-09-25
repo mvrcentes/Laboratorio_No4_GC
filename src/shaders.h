@@ -10,7 +10,7 @@
 
 
 
-int selectedPlanet = 1;
+int selectedPlanet = 2;
 
 Vertex vertexShader(const Vertex& vertex, const Uniforms& uniforms) {
     // Apply transformations to the input vertex using the matrices from the uniforms
@@ -66,6 +66,96 @@ if (selectedPlanet == 1) {
 
     Fragment processedFragment = fragment;
     processedFragment.color = color * fragment.intensity;
+
+    return processedFragment;
+}
+
+if (selectedPlanet == 2) {
+    Color color;
+
+    // Define los colores base y los colores de las capas
+    glm::vec3 baseColor = glm::vec3(0.02f, 0.23f, 0.35f); // #023859
+    glm::vec3 secondColor = glm::vec3(0.03f, 0.35f, 0.55f); // #07598C
+    glm::vec3 thirdColor = glm::vec3(0.65f, 0.39f, 0.08f); // #A66414
+    glm::vec3 fourthColor = glm::vec3(0.35f, 0.24f, 0.15f); // #593E25
+
+    glm::vec2 uv = glm::vec2(fragment.original.x, fragment.original.y);
+
+    FastNoiseLite noiseGenerator;
+    noiseGenerator.SetNoiseType(FastNoiseLite::NoiseType_Perlin); // Cambiado el tipo de ruido a Perlin
+
+    // Ajusta estos valores para controlar la apariencia de las capas
+    float baseLayerThreshold = 10.4f;
+    float secondLayerThreshold = 0.7f;
+
+    float ox = 1200.0f;
+    float oy = 3000.0f;
+    float zoom = 200.0f;
+
+    float noiseValue = noiseGenerator.GetNoise((uv.x + ox) * zoom, (uv.y + oy) * zoom);
+
+    glm::vec3 tmpColor = baseColor;
+
+    // Define la frecuencia y amplitud de las ondas de medusa
+    float frequencyX = 100.0f;
+    float frequencyY = 100.0f;
+    float amplitude = 0.2f;
+
+    // Simula una animación en el "iris" utilizando un temporizador simple
+    static float t = 0.0f;
+    t += 0.01f; // Ajusta la velocidad de la animación cambiando este valor
+
+    // Calcula un valor de onda utilizando la función seno en ambos ejes
+    float waveValue = (sin(uv.x * frequencyX + t) * sin(uv.y * frequencyY + t) * 0.5f + 0.5f);
+
+    if (waveValue > amplitude) {
+        // Asigna el color base
+        tmpColor = baseColor;
+    } else {
+        // Asigna el segundo color
+        tmpColor = secondColor;
+    }
+
+    //-------------------------------------
+
+    // Agregar múltiples manchas de medusa
+    glm::vec2 medusaCenters[] = {
+        glm::vec2(0.3f, 0.6f), glm::vec2(0.7f, 0.4f), glm::vec2(0.5f, 0.5f),
+        glm::vec2(0.2f, 0.8f), glm::vec2(0.8f, 0.2f), glm::vec2(0.3f, 0.3f),
+        glm::vec2(0.7f, 0.7f), glm::vec2(0.4f, 0.6f), glm::vec2(0.9f, 1.3f),
+        glm::vec2(0.3f, 0.2f), glm::vec2(0.4f, 4.4f), glm::vec2(0.4f, 3.4f),
+        glm::vec2(0.6f, 0.1f), glm::vec2(0.4f, 8.4f) // Añade más coordenadas para más manchas
+    };
+    float medusaRadius = 0.05f;
+
+    for (int i = 0; i < 3; i++) {
+        float distanceToMedusa = glm::distance(uv, medusaCenters[i]);
+
+        if (distanceToMedusa < medusaRadius) {
+            float opacity = 10.5f;
+            tmpColor = glm::mix(tmpColor, thirdColor, opacity);
+        }        
+    }
+
+    // Puedes ajustar estos valores según tus preferencias para la apariencia de las capas
+    float cloudLayerThreshold = 0.5f;
+    float cloudDensity = 0.7f;
+
+    float oxc = 5500.0f;
+    float oyc = 6900.0f;
+    float zoomc = 300.0f;
+
+    float noiseValueC = noiseGenerator.GetNoise(sin(((uv.x + oxc) * zoomc)), sin((uv.y + oyc) * zoomc));
+
+    if (noiseValueC < cloudLayerThreshold) {
+        // Agrega ruido de nubes utilizando el cuarto color
+        tmpColor = glm::mix(tmpColor, fourthColor, cloudDensity);
+    }
+
+    color = Color(tmpColor.x, tmpColor.y, tmpColor.z);
+
+    Fragment processedFragment = fragment;
+    processedFragment.color = (color * fragment.intensity * zoomc);
 
     return processedFragment;
 }
