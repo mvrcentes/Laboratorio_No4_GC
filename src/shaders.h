@@ -10,7 +10,7 @@
 
 
 
-int selectedPlanet = 3;
+int selectedPlanet = 4;
 
 Vertex vertexShader(const Vertex& vertex, const Uniforms& uniforms) {
     // Apply transformations to the input vertex using the matrices from the uniforms
@@ -209,6 +209,58 @@ if (selectedPlanet == 3) {
 
     Fragment processedFragment = fragment;
     processedFragment.color = color * fragment.intensity;
+
+    return processedFragment;
+}
+
+if (selectedPlanet == 4) {
+    Color color;
+
+    // Define los cuatro colores para las regiones del cerebro
+    glm::vec3 colorRegion1 = glm::vec3(0.65f, 0.46f, 0.40f); // #A67665
+    glm::vec3 colorRegion2 = glm::vec3(0.85f, 0.65f, 0.59f); // #D9A796
+    glm::vec3 colorRegion3 = glm::vec3(0.25f, 0.05f, 0.0f);  // #400D01
+    glm::vec3 colorRegion4 = glm::vec3(0.45f, 0.21f, 0.16f); // #733729
+
+    // Simula el aspecto del cerebro utilizando ruido y ondas
+    glm::vec2 uv = glm::vec2(fragment.original.x, fragment.original.y);
+
+    FastNoiseLite noiseGenerator;
+    noiseGenerator.SetNoiseType(FastNoiseLite::NoiseType_Perlin); // Cambiado el tipo de ruido a Perlin
+
+    // Ajusta la escala del ruido para controlar la distribución de las regiones
+    float noiseScale = 10000.0f;
+    float noiseValue = noiseGenerator.GetNoise(uv.x * noiseScale, uv.y * noiseScale);
+
+    // Define la frecuencia y amplitud de las ondas
+    float waveFrequency = 100.0f;
+    float waveAmplitude = 0.5f;
+
+    // Calcula un valor de onda utilizando la función seno en ambos ejes
+    float waveValue = (sin(uv.x * waveFrequency) * sin(uv.y * waveFrequency) * waveAmplitude);
+
+    // Combina el valor de ruido con el valor de onda para agregar textura
+    float finalValue = noiseValue + waveValue ;
+
+    // Define umbrales para las regiones del cerebro
+    float threshold1 = 0.2f;
+    float threshold2 = 0.7f;
+    float threshold3 = 0.1f;
+    float threshold4 = 0.1f;
+
+    // Asigna colores a las regiones según el valor combinado de ruido y onda
+    if (finalValue < threshold1) {
+        color = Color(colorRegion1.x, colorRegion1.y, colorRegion1.z);
+    } else if (finalValue < threshold2) {
+        color = Color(colorRegion2.x, colorRegion2.y, colorRegion2.z);
+    } else if (finalValue < threshold3) {
+        color = Color(colorRegion3.x, colorRegion3.y, colorRegion3.z);
+    } else {
+        color = Color(colorRegion4.x, colorRegion4.y, colorRegion4.z);
+    }
+
+    Fragment processedFragment = fragment;
+    processedFragment.color = color;
 
     return processedFragment;
 }
