@@ -1,0 +1,3 @@
+/Users/mvrcentes/Library/CloudStorage/OneDrive-UVG/Documentos/Semestre_6/Graficas_por_computadoras/Laboratorio_No4_GC/build/CMakeFiles/SR.dir
+/Users/mvrcentes/Library/CloudStorage/OneDrive-UVG/Documentos/Semestre_6/Graficas_por_computadoras/Laboratorio_No4_GC/build/CMakeFiles/edit_cache.dir
+/Users/mvrcentes/Library/CloudStorage/OneDrive-UVG/Documentos/Semestre_6/Graficas_por_computadoras/Laboratorio_No4_GC/build/CMakeFiles/rebuild_cache.dir
