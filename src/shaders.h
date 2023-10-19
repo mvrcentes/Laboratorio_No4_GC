@@ -10,7 +10,7 @@
 
 
 
-int selectedPlanet = 4;
+int selectedPlanet = 5;
 
 Vertex vertexShader(const Vertex& vertex, const Uniforms& uniforms) {
     // Apply transformations to the input vertex using the matrices from the uniforms
@@ -265,4 +265,41 @@ if (selectedPlanet == 4) {
     return processedFragment;
 }
 
+if (selectedPlanet == 5) {
+        Color color;
+
+        // Define los colores base para el planeta "Cartílago Hialino"
+        glm::vec3 baseColor = glm::vec3(0.686f, 0.443f, 0.851f); // #AF71D9 (Color predominante)
+        glm::vec3 color1 = glm::vec3(0.768f, 0.796f, 0.949f);     // #C4CBF2 (Color secundario)
+        glm::vec3 color2 = glm::vec3(0.018f, 0.615f, 0.850f);     // #049DD9 (Color secundario)
+        glm::vec3 color3 = glm::vec3(0.018f, 0.698f, 0.850f);     // #04B2D9 (Color secundario)
+        glm::vec3 color4 = glm::vec3(0.023f, 0.859f, 0.949f);     // #05DBF2 (Color secundario)
+
+        glm::vec2 uv = glm::vec2(fragment.original.x, fragment.original.y);
+
+        // Simula un patrón en el planeta "Cartílago Hialino" basado en coordenadas uv
+        float pattern = sin(uv.x * 50.0f) * cos(uv.y * 50.0f);
+
+        // Ajusta la escala y la apariencia del patrón
+        float cellSize = 1.105f; // Tamaño de las células
+        pattern = glm::fract(pattern / cellSize); // Divide el patrón en celdas más pequeñas
+
+        // Ajusta la apariencia del planeta basada en el patrón
+        if (pattern < 0.1f) {
+            color = Color(baseColor.x, baseColor.y, baseColor.z);
+        } else if (pattern < 0.3f) {
+            color = Color(color1.x, color1.y, color1.z);
+        } else if (pattern < 0.5f) {
+            color = Color(color2.x, color2.y, color2.z);
+        } else if (pattern < 0.7f) {
+            color = Color(color3.x, color3.y, color3.z);
+        } else {
+            color = Color(color4.x, color4.y, color4.z);
+        }
+
+        Fragment processedFragment = fragment;
+        processedFragment.color = color * fragment.intensity;
+
+        return processedFragment;
+    }
 }
