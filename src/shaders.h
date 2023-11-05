@@ -10,7 +10,7 @@
 
 
 
-int selectedPlanet = 5;
+int selectedPlanet =6;
 
 Vertex vertexShader(const Vertex& vertex, const Uniforms& uniforms) {
     // Apply transformations to the input vertex using the matrices from the uniforms
@@ -302,4 +302,50 @@ if (selectedPlanet == 5) {
 
         return processedFragment;
     }
+
+    if (selectedPlanet == 6) {
+    Color color;
+
+    glm::vec3 secondColor = glm::vec3(0.0f/255.0f, 0.0f/255.0f, 0.0f/255.0f);
+    glm::vec3 mainColor = glm::vec3(255.0f/255.0f, 255.0f/255.0f, 255.0f/255.0f);
+
+    glm::vec2 uv = glm::vec2(fragment.original.x, fragment.original.y);
+
+    FastNoiseLite noiseGenerator;
+    noiseGenerator.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
+
+    float offsetX = 8000.0f;
+    float offsetY = 1000.0f;
+    float scale = 30000.0f;
+
+    // Genera el valor de ruido
+    float noiseValue = noiseGenerator.GetNoise((uv.x + offsetX) * scale, (uv.y + offsetY) * scale);
+    noiseValue = (noiseValue + 1.0f) * 0.9f;
+
+    // Interpola entre el color base y el color secundario basado en el valor de ruido
+    secondColor = glm::mix(mainColor, secondColor, noiseValue);
+
+    if (noiseValue > 0.99f) {
+        // Calcula el valor sinusoide para crear líneas
+        float sinValue = glm::cos(uv.y * 100.01f) * 0.1f;
+
+        sinValue = glm::smoothstep(100.8f, 10.0f, sinValue);
+
+        // Combina el color base con las líneas sinusoide
+        secondColor = secondColor + glm::vec3(sinValue);
+    }
+
+    // Interpola entre el color base y el color secundario basado en el valor de ruido
+    mainColor = glm::mix(mainColor, mainColor, noiseValue);
+
+    // Interpola entre el color base y el color secundario basado en el valor de ruido
+    secondColor = glm::mix(mainColor, secondColor, noiseValue);
+
+    color = Color(secondColor.x, secondColor.y, secondColor.z);
+
+    Fragment processedFragment = fragment;
+    processedFragment.color = color * fragment.intensity * fragment.intensity * fragment.intensity;
+
+    return processedFragment;
+}
 }

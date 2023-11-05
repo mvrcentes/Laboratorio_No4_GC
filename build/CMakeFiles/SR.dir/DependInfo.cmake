@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/mvrcentes/Library/CloudStorage/OneDrive-UVG/Documentos/Semestre_6/Graficas_por_computadoras/Laboratorio_No4_GC/src/ObjLoader.cpp" "CMakeFiles/SR.dir/src/ObjLoader.cpp.o" "gcc" "CMakeFiles/SR.dir/src/ObjLoader.cpp.o.d"
-  "/Users/mvrcentes/Library/CloudStorage/OneDrive-UVG/Documentos/Semestre_6/Graficas_por_computadoras/Laboratorio_No4_GC/src/main.cpp" "CMakeFiles/SR.dir/src/main.cpp.o" "gcc" "CMakeFiles/SR.dir/src/main.cpp.o.d"
+  "/Users/mvrcentes/Downloads/Laboratorio_No4_GC/src/ObjLoader.cpp" "CMakeFiles/SR.dir/src/ObjLoader.cpp.o" "gcc" "CMakeFiles/SR.dir/src/ObjLoader.cpp.o.d"
+  "/Users/mvrcentes/Downloads/Laboratorio_No4_GC/src/main.cpp" "CMakeFiles/SR.dir/src/main.cpp.o" "gcc" "CMakeFiles/SR.dir/src/main.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.
