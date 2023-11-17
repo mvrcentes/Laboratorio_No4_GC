@@ -1,4 +1,4 @@
-# Laboratorio_No4_GC
+# Proyecto
 
 | Puntos | Requerimiento | Check | Comentario |
 |----|----|----|----|
