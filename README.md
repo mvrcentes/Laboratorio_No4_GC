@@ -14,6 +14,9 @@
 | 20 | Por renderizar las orbitas de los planetas | ❌ |  |
 | - | - | Total: 180 |  |
 
+![](https://github.com/mvrcentes/Laboratorio_No4_GC/blob/Proyecto/video2.gif?raw=true)
+![](https://github.com/mvrcentes/Laboratorio_No4_GC/blob/Proyecto/video.gif?raw=true)
+
 
 ### Planet No. 1: Rocoso
 ![](https://github.com/mvrcentes/Laboratorio_No4_GC/blob/master/images/planet_No6.png?raw=true)
