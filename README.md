@@ -1,10 +1,6 @@
 # Laboratorio_No4_GC Y Proyecto 
 
-| branch |
-| ------ |
-| proyecto |
-| master |
-
+![Proyecto](https://github.com/mvrcentes/Laboratorio_No4_GC/tree/Proyecto)
 
 ### Planet No. 1: Rocoso
 ![](https://github.com/mvrcentes/Laboratorio_No4_GC/blob/master/images/planet_No6.png?raw=true)
